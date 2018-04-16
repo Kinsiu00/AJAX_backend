@@ -22,7 +22,7 @@ const update = (request, response) => {
 
 const destroy = (request, response) => {
   const blogpost = blogModel.destroy(request.params.id);
-  request.response(blogpost);
+  response.send(blogpost);
 }
 
 module.exports = {

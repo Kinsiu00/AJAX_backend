@@ -17,30 +17,33 @@ const readSingle = (id) => {
   return blogPost;
 }
 
-const create = (blogPost) => {
+const create = (request) => {
   const blogJSON = fs.readFileSync(blogPath, 'utf8');
   const blogPosts = JSON.parse(blogJSON);
-  blogPost.id = uuid();
-  blogPost.title = "";
-  blogPost.content = "";
-  blogPosts.push(blogPost);
+  const newPost = {
+    id: uuid(),
+    title: request.title || 'untitled',
+    content: request.content || 'N/A'
+  }
+  blogPosts.push(newPost);
   fs.writeFileSync(blogPath, JSON.stringify(blogPosts));
-  return blogPost;
+  return newPost;
 }
 
 const update = (id, updates) => {
   let result;
   const blogJSON = fs.readFileSync(blogPath, 'utf8');
   const blogPosts = JSON.parse(blogJSON);
-  const updatedBlogPosts = blogPosts.map(blogPost => {
-    if (blogPost.id === id){
+  const updatedBlogPosts = blogPosts.map( blogPost => {
+    if (blogPost.id === id) {
       result = {...blogPost, ...updates};
       return result;
     } else {
-      return artist;
+      return blogPost;
     }
   });
-  fs.writeFileSync(artistPath, JSON.parse(updatedBlogPosts));
+  fs.writeFileSync(blogPath, JSON.stringify(updatedBlogPosts));
+  return result;
 }
 
 const destroy = (id) => {
@@ -51,10 +54,10 @@ const destroy = (id) => {
     if (blogPost.id === id){
       result = blogPost;
     }
-    return artist.id !== id;
+    return blogPost.id !== id;
   })
-  fs.writeFileSync(blogPath, JSON.parse(remainingBlog));
-  return result;
+  fs.writeFileSync(blogPath, JSON.stringify(remainingBlog));
+  return remainingBlog;
 }
 
 module.exports = {
